@@ -48,14 +48,14 @@ while True:
             elif event.key == pygame.K_r: 
                 restart_music()
                 
-    window.fill((0, 255, 255))
+    window.fill("#Ffa500")
     window.blit(canvas, ((WINDOW_WIDTH - CANVAS_WIDTH)/2, (WINDOW_HEIGHT - CANVAS_HEIGHT)/2 - 60))
     
 
     button_font = pygame.font.Font(None, 24)
-    play_button = button_font.render("Press 's' or draw 's' to start", True, (0, 0, 0))
-    pause_button = button_font.render("Press 'p' or draw 'o' to pause", True, (0, 0, 0))
-    restart_button = button_font.render("Press 'r' or draw '>' to restart", True, (0, 0, 0))
+    play_button = button_font.render("Press 's' or draw 's' to start", True, (250, 250, 250))
+    pause_button = button_font.render("Press 'p' or draw 'o' to pause", True, (250, 250, 250))
+    restart_button = button_font.render("Press 'r' or draw 'v' to restart", True, (250, 250, 250))
     window.blit(play_button, (WINDOW_WIDTH/2 - 60, 380))
     window.blit(pause_button, (WINDOW_WIDTH/2 - 60, 410))
     window.blit(restart_button, (WINDOW_WIDTH/2 - 60, 440))
