@@ -73,16 +73,15 @@ def handle_drawing_update(drawing):
     if drawing:
         print("on drawing")
     else:
-        print("stoped")
+        print("stop")
         points = getattr(drawing_app, 'points') 
         if(len(points)>0):
-            resampled_points = recognizer.resample(points, 64)
+            resampled_points = recognizer.resample(points, 32)
             rotated_points = recognizer.rotate_to_zero(resampled_points)  
             scaled_points = recognizer.scale_to_square(rotated_points, CANVAS_SIZE)
             transfered_points = recognizer.translate_to_origin(scaled_points)
-            print("HIER")
             best_result, score = recognizer.recognize(transfered_points, recognizer.templates, CANVAS_SIZE)
-            print("best_result: "+best_result)
+            #print("best_result: "+best_result)
      
        
 def main():
