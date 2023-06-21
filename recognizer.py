@@ -19,51 +19,23 @@ templates = {
     'v_point' : VPoints
 }
 
-'''
-Unsolved Error
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "C:\Users\yuliu\AppData\Local\Programs\Python\Python311\Lib\tkinter\__init__.py", line 1948, in __call__
-    return self.func(*args)
-           ^^^^^^^^^^^^^^^^
-  File "c:\Users\yuliu\Projects\noProject\assignment-06-gesture-recognition-Leosssss\gesture-input.py", line 64, in stop_drawing
-    self.update_callback()
-  File "c:\Users\yuliu\Projects\noProject\assignment-06-gesture-recognition-Leosssss\gesture-input.py", line 45, in update_callback
-    self.callback(self.drawing)
-  File "c:\Users\yuliu\Projects\noProject\assignment-06-gesture-recognition-Leosssss\gesture-input.py", line 83, in handle_drawing_update
-    best_result, score = recognizer.recognize(transfered_points, recognizer.templates, CANVAS_SIZE)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "c:\Users\yuliu\Projects\noProject\assignment-06-gesture-recognition-Leosssss\recognizer.py", line 109, in recognize
-    distance = distance_at_best_angle(points, template, -45, 45, 2)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "c:\Users\yuliu\Projects\noProject\assignment-06-gesture-recognition-Leosssss\recognizer.py", line 119, in distance_at_best_angle
-    f1 = distance_at_angle(points, template, x1)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "c:\Users\yuliu\Projects\noProject\assignment-06-gesture-recognition-Leosssss\recognizer.py", line 141, in distance_at_angle
-    return path_distance(new_points, template)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "c:\Users\yuliu\Projects\noProject\assignment-06-gesture-recognition-Leosssss\recognizer.py", line 147, in path_distance
-    distance_sum += distance(points_a[i], points_b[i])
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "c:\Users\yuliu\Projects\noProject\assignment-06-gesture-recognition-Leosssss\recognizer.py", line 25, in distance
-    x2, y2 = p2
-    ^^^^^^
-ValueError: not enough values to unpack (expected 2, got 1)
-'''
 
 # Step 1. Resample a points path into n evenly spaced points.    
 def distance(p1, p2):
+    print("POINTS:", p1, p2)
     x1, y1 = p1
     x2, y2 = p2
     return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
 
 def path_length(points):
+    print('length')
     d = 0
     for i in range(1, len(points)):
         d += distance(points[i - 2], points[i-1])
     return d
 
 def resample(points, n):
+    print('resample')
     length = path_length(points) 
     interval = length / (n - 1)
     
@@ -137,16 +109,20 @@ def recognize(points, templates, size):
     best_distance = float("inf")
     best_template = None
 
-    for template in templates:
-        distance = distance_at_best_angle(points, template, -45, 45, 2)
+    for template in templates.keys():
+        distance = distance_at_best_angle(points, templates[template], -45, 45, 2)
         if distance < best_distance:
             best_distance = distance
             best_template = template
 
     score = 1 - best_distance / (0.5 * math.sqrt(size ** 2 + size ** 2))
+
+    print('===== Result: ', best_template, score, ' =====')
     return best_template, score
 
 def distance_at_best_angle(points, template, theta_a, theta_b, theta_delta):
+
+    print('best angle dist')
     x1 = 0.5 * (-1 + math.sqrt(5)) * theta_a + (1 - 0.5 * (-1 + math.sqrt(5))) * theta_b
     f1 = distance_at_angle(points, template, x1)
     x2 = (1 - 0.5 * (-1 + math.sqrt(5))) * theta_a + 0.5 * (-1 + math.sqrt(5)) * theta_b
@@ -169,10 +145,13 @@ def distance_at_best_angle(points, template, theta_a, theta_b, theta_delta):
     return min(f1, f2)
 
 def distance_at_angle(points, template, theta):
+    print('angle dist')
     new_points = rotate_by(points, theta)
     return path_distance(new_points, template)
 
 def path_distance(points_a, points_b):
+    print('path dist')
+    print(points_a, points_b)
     distance_sum = 0
     num_points = len(points_a)
     for i in range(num_points):
